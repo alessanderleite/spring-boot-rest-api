@@ -2,6 +2,7 @@ package br.com.alessanderleite.app.controller;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,11 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
+	@Autowired
+	private ModelMapper mapper;
+
 	@PostMapping
 	public ResponseEntity<Response<UserDto>> create(@Valid @RequestBody UserDto dto, BindingResult result) {
-		
 		Response<UserDto> response = new Response<>();
 		User user = service.save(this.convertDtoToEntity(dto));
 		response.setData(this.convertEntityToDto(user));
@@ -34,19 +37,13 @@ public class UserController {
 	}
 	
 	private User convertDtoToEntity(UserDto dto) {
-		User u = new User();
-		u.setName(dto.getName());
-		u.setPassword(dto.getPassword());
-		u.setEmail(dto.getEmail());
-		
+		User u = mapper.map(dto, User.class);
+
 		return u;
 	}
 	
 	private UserDto convertEntityToDto(User u) {
-		UserDto dto = new UserDto();
-		dto.setName(u.getName());
-		dto.setPassword(u.getPassword());
-		dto.setEmail(u.getEmail());
+		UserDto dto = mapper.map(u, UserDto.class);
 		
 		return dto;
 	}
