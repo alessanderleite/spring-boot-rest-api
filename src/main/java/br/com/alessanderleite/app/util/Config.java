@@ -1,4 +1,4 @@
-package br.com.alessanderleite.app.config;
+package br.com.alessanderleite.app.util;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
